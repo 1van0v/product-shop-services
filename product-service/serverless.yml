@@ -1,5 +1,6 @@
 service: product-service
 frameworkVersion: '2'
+useDotenv: true
 
 # Add the serverless-webpack plugin
 plugins:
@@ -7,9 +8,18 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   lambdaHashingVersion: 20201221
   region: eu-west-1
+  httpApi:
+    cors: true
+
+  environment:
+    DB_HOST: ${env:PG_HOST}
+    DB_PORT: ${env:PG_PORT}
+    DB_NAME: ${env:PG_NAME}
+    DB_USER: ${env:PG_USER}
+    DB_PASSWORD: ${env:PG_PASSWORD}
 
 functions:
   getProductsList:
@@ -18,7 +28,6 @@ functions:
       - httpApi:
           method: get
           path: /products
-          cors: true
   
   getProductsById:
     handler: handlers/products.getProductsById
@@ -26,4 +35,10 @@ functions:
       - httpApi:
           method: get
           path: /products/{productId}
-          cors: true
+
+  createProduct:
+    handler: handlers/add-product.createProduct
+    events:
+      - httpApi:
+          method: post
+          path: /products
