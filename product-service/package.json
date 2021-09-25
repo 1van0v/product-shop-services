@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Serverless webpack example using ecma script",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "deploy": "serverless deploy"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",
@@ -12,6 +13,7 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.7.0",
+    "dotenv": "^10.0.0",
     "jest": "^27.1.0",
     "serverless-webpack": "^5.3.1",
     "webpack": "^4.35.2"
@@ -19,7 +21,8 @@
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "pg": "^8.7.1"
   },
   "jest": {
     "moduleFileExtensions": [
