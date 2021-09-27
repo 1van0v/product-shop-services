@@ -4,6 +4,9 @@ import { s3 } from '../services/s3.service';
 export const importProductsFile = async (event) => {
   const fileName = event.queryStringParameters.name;
   const uploadPath = `uploaded/${fileName}`;
+
+  console.log('file to upload', fileName);
+
   const uploadParameters = {
     Bucket: BUCKET,
     Key: uploadPath,
@@ -17,6 +20,8 @@ export const importProductsFile = async (event) => {
         console.log('error', error);
         return reject(error);
       }
+
+      console.log('upload url', url);
 
       resolve({
         statusCode: 202,

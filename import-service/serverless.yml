@@ -14,14 +14,15 @@ provider:
     cors: true
 
   iamRoleStatements:
-    - Effect: 'Allow'
-      Action: 's3:ListBucket'
+    - Effect: Allow
+      Action: s3:ListBucket
       Resource:
-        - 'arn:aws:s3:::rsschool-imported-products'
-    - Effect: 'Allow'
-      Action: 's3:*'
+        - arn:aws:s3:::rsschool-imported-products
+    - Effect: Allow
+      Action:
+        - s3:*
       Resource:
-        - 'arn:aws:s3:::rsschool-imported-products/*'
+        - arn:aws:s3:::rsschool-imported-products/*
 
 functions:
   importProductsFile:
@@ -30,3 +31,12 @@ functions:
       - httpApi:
           method: get
           path: /import
+  importFileParser:
+    handler: handlers/file-parser.importFileParser
+    events:
+      - s3:
+          bucket: rsschool-imported-products
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploaded/
+          existing: true
