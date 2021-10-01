@@ -1,0 +1,1 @@
+export const BUCKET = 'rsschool-imported-products';
