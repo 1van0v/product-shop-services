@@ -21,6 +21,14 @@ provider:
     DB_USER: ${env:PG_USER}
     DB_PASSWORD: ${env:PG_PASSWORD}
 
+resources:
+  Resources:
+    catalogItemsQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogItemsQueue
+        ReceiveMessageWaitTimeSeconds: 20
+
 functions:
   getProductsList:
     handler: handlers/products-list.getProductsList
@@ -42,3 +50,13 @@ functions:
       - httpApi:
           method: post
           path: /products
+  
+  catalogBatchProcess:
+    handler: handlers/batch-processor.catalogBatchProcess
+    events:
+      - sqs:
+          batchSize: 5
+          arn:
+            Fn::GetAtt:
+              - catalogItemsQueue
+              - Arn
