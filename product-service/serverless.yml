@@ -20,6 +20,18 @@ provider:
     DB_NAME: ${env:PG_NAME}
     DB_USER: ${env:PG_USER}
     DB_PASSWORD: ${env:PG_PASSWORD}
+    SNS_ARN: 
+      Ref: createProductTopic
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action: 'sqs:*'
+      Resource:
+        - Fn::GetAtt: [catalogItemsQueue, Arn]
+    - Effect: Allow
+      Action: 'sns:*'
+      Resource:
+        Ref: createProductTopic
 
 resources:
   Resources:
@@ -28,6 +40,17 @@ resources:
       Properties:
         QueueName: catalogItemsQueue
         ReceiveMessageWaitTimeSeconds: 20
+    createProductTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: createProductTopic
+    SNSSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: ivanov5oleksandr@gmail.com
+        Protocol: email
+        TopicArn:
+          Ref: createProductTopic
 
 functions:
   getProductsList:
@@ -55,9 +78,8 @@ functions:
     handler: handlers/batch-processor.catalogBatchProcess
     events:
       - sqs:
-          batchSize: 5
-          MaximumBatchingWindowInSeconds: 60
           arn:
             Fn::GetAtt:
               - catalogItemsQueue
               - Arn
+          batchSize: 5

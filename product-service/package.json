@@ -21,6 +21,7 @@
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
   "license": "MIT",
   "dependencies": {
+    "aws-sdk": "^2.1001.0",
     "axios": "^0.21.1",
     "pg": "^8.7.1"
   },
