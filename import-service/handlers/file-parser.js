@@ -1,10 +1,12 @@
 import csv from 'csv-parser';
+import { SQS } from 'aws-sdk';
 
 import { s3 } from '../services/s3.service';
 
 export const importFileParser = async (event) => {
+  const sqs = new SQS();
+
   for (const record of event.Records) {
-    // const s3 = new AWS.S3({ region: 'eu-west-1' });
     const uploadedFile = decodeURIComponent(record.s3.object.key);
     const parsedFile = uploadedFile.replace('uploaded', 'parsed');
     const bucketName = record.s3.bucket.name;
@@ -20,7 +22,13 @@ export const importFileParser = async (event) => {
       s3File.createReadStream()
         .on('error', reject)
         .pipe(csv())
-        .on('data', data => console.log('record =', data))
+        .on('data', async (data) => {
+          await sqs.sendMessage({
+            QueueUrl: process.env.SQS_URL,
+            MessageBody: JSON.stringify(data)
+          }).promise();
+          console.log('sent', data, 'to', process.env.SQS_URL);
+        })
         .on('end', () => {
           console.log('parsed', uploadedFile);
           resolve();

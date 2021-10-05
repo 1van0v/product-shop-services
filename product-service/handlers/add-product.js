@@ -4,8 +4,7 @@ import { handleError } from '../utils/error-handler.js'
 
 export const createProduct = async (event, context, callback) => {
   try {
-    const { image, ...product } = JSON.parse(event.body);
-    product.image_url = image;
+    const product = JSON.parse(event.body);
     const data = await productsService.createProduct(product);
     console.log('product created', data);
     callback(null, createJsonResponse(data));

@@ -1,5 +1,6 @@
 service: import-service
 frameworkVersion: '2'
+useDotenv: true
 
 # Add the serverless-webpack plugin
 plugins:
@@ -13,6 +14,9 @@ provider:
   httpApi:
     cors: true
 
+  environment:
+    SQS_URL: ${env:SQS_URL}
+
   iamRoleStatements:
     - Effect: Allow
       Action: s3:ListBucket
@@ -23,6 +27,10 @@ provider:
         - s3:*
       Resource:
         - arn:aws:s3:::rsschool-imported-products/*
+    - Effect: Allow
+      Action: sqs:*
+      Resource:
+        - ${env:PRODUCTS_QUEUE}
 
 functions:
   importProductsFile:
