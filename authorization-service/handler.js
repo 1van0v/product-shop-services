@@ -1,9 +1,5 @@
-import dotenv from 'dotenv';
-
-dotenv.config();
-
 const isAllowed = (username, password) => {
-  return username === process.env.username && password === process.env.password;
+  return username in process.env && password === process.env[username];
 };
 
 export const basicAuthorizer = (event, context, callback) => {

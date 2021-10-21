@@ -13,8 +13,7 @@ provider:
   region: eu-west-1
 
   environment:
-    username: ${env:username}
-    password: ${env:password}
+    ivan0v: ${env:ivan0v}
 
 functions:
   basicAuthorizer:
