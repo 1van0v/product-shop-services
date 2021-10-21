@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const urlToId = (url) => url.split('/').slice(-2)[0];
 
-const vehicleBaseUrl = 'https://swapi.dev/api/vehicles/?page=2';
+const vehicleBaseUrl = 'https://swapi.dev/api/vehicles/?page=4';
 const imageBaseUrl = 'https://starwars-visualguide.com/assets/img/vehicles/';
 
 const spaceVehicleToProduct = (vehicle) => {
@@ -12,7 +12,7 @@ const spaceVehicleToProduct = (vehicle) => {
   return {
     count: vehicle.crew,
     title: vehicle.name,
-    price: isNaN(vehicle.cost_in_credits) ? vehicle.max_atmosphering_speed * vehicle.length : vehicle.cost_in_credits,
+    price: isNaN(vehicle.cost_in_credits) ? 1234567890 : vehicle.cost_in_credits,
     description: vehicle.model,
     image: imageBaseUrl + id + '.jpg'
   };
