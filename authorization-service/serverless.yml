@@ -1,0 +1,20 @@
+service: authorization-service
+frameworkVersion: '2'
+useDotenv: true
+
+# Add the serverless-webpack plugin
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  lambdaHashingVersion: 20201221
+  region: eu-west-1
+
+  environment:
+    ivan0v: ${env:ivan0v}
+
+functions:
+  basicAuthorizer:
+    handler: handler.basicAuthorizer

@@ -13,6 +13,12 @@ provider:
   lambdaHashingVersion: 20201221
   httpApi:
     cors: true
+    authorizers:
+      basicAuthorizer:
+        functionArn: ${env:BASIC_AUTHORIZER}
+        resultTtlInSeconds: 0
+        identitySource: $request.header.Authorization
+        type: request
 
   environment:
     SQS_URL: ${env:SQS_URL}
@@ -39,6 +45,9 @@ functions:
       - httpApi:
           method: get
           path: /import
+          authorizer:
+            name: basicAuthorizer
+            
   importFileParser:
     handler: handlers/file-parser.importFileParser
     events:
