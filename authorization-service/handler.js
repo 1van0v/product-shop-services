@@ -1,5 +1,5 @@
 const isAllowed = (username, password) => {
-  return username in process.env && password === process.env[username];
+  return process.env?.[username] === password;
 };
 
 export const basicAuthorizer = (event, context, callback) => {
